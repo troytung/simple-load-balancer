@@ -1,0 +1,23 @@
+version: "3"
+services:
+  lb:
+    image: nginx
+    volumes:
+      # mount load balancer configuration
+      - ./conf/load-balancer.conf:/etc/nginx/conf.d/load-balancer.conf:ro
+    ports:
+      - "8080:80"
+    # disable nginx's default configuration
+    command: /bin/bash -c "mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.disabled && exec nginx -g 'daemon off;'"
+  web1:
+    image: nginx
+    container_name: web1
+  web2:
+    image: nginx
+    container_name: web2
+  web3:
+    image: nginx
+    container_name: web3
+volumes:
+  conf:
+    driver: local
